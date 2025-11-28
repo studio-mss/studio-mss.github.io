@@ -15,41 +15,56 @@
         
         body { display: flex; flex-direction: column; }
 
-        /* === Header === */
+        /* === [수정됨] Header System === */
         header {
             flex: 0 0 auto; width: 100%;
-            background: #fff; border-bottom: 1px solid #000; z-index: 100;
-            padding: 1.5rem 2rem;
-            display: flex; flex-direction: column; justify-content: space-between; gap: 1rem;
+            background: #fff;
+            /* border-bottom 삭제: 꽉 찬 줄 제거 */
+            z-index: 100;
+            padding: 0 2rem; /* 좌우 여백만 줌 (줄이 여기서 끊김) */
+            display: flex;
+            flex-direction: column;
         }
 
-        .header-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        /* 1. 상단 영역 (로고, 메뉴) + 아래 줄 */
+        .header-top { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            flex-wrap: wrap; 
+            gap: 15px;
+            padding: 1.5rem 0; /* 위아래 여백 */
+            border-bottom: 1px solid #000; /* [핵심] 여백 안쪽에 그어지는 줄 */
+        }
+
         .brand-name { font-family: 'Pretendard', sans-serif; font-weight: 800; font-size: 1.5rem; color: #000; cursor: pointer; white-space: nowrap; }
         .filter-menu { display: flex; gap: 20px; flex-wrap: wrap; }
         .filter-btn { font-family: 'Pretendard', sans-serif; font-size: 1rem; font-weight: 600; cursor: pointer; color: #000; }
         .filter-btn:hover { text-decoration: underline; color: #666; }
         .filter-btn.active { text-decoration: underline; font-weight: 900; }
         .date-text { font-family: 'Pretendard', sans-serif; font-weight: 600; white-space: nowrap; }
+
+        /* 2. 하단 영역 (설명글) + 아래 줄 */
+        .header-bottom {
+            padding: 1.5rem 0; /* 위아래 여백 */
+            border-bottom: 1px solid #000; /* [핵심] 설명글 아래 줄 */
+            display: flex;
+            justify-content: flex-end; /* 설명글 오른쪽 정렬 (레퍼런스 참고) */
+        }
         
         .header-desc { 
             font-family: 'Noto Serif KR', serif; font-size: 0.9rem; line-height: 1.4; color: #333; 
-            width: 70%; word-break: keep-all; 
+            width: 60%; /* 설명글 너비 */
+            word-break: keep-all; 
         }
 
-        /* === [수정됨] 모바일/좁은 화면 대응 === */
         @media (max-width: 768px) {
-            header { padding: 1rem; gap: 0.8rem; }
-            .header-top { gap: 10px; }
+            header { padding: 0 1rem; }
+            .header-top { gap: 10px; padding: 1rem 0; }
             .brand-name { font-size: 1.2rem; }
             .filter-btn { font-size: 0.9rem; }
-            .date-text { font-size: 0.9rem; }
-            
-            /* 숨김(display:none) 제거하고, 크기만 살짝 줄여서 보이게 함 */
-            .header-desc { 
-                display: block !important; 
-                width: 100%; 
-                font-size: 0.8rem; 
-            }
+            .header-bottom { padding: 1rem 0; }
+            .header-desc { width: 100%; font-size: 0.8rem; }
         }
 
         /* === Content === */
@@ -102,8 +117,11 @@
             </div>
             <div class="date-text">2025.11.28</div>
         </div>
-        <div class="header-desc">
-            Curabitur vitae odio pretium, volutpat augue efficitur, ullamcorper ante. Nunc ultrices eget urna in aliquet. Nulla at ullamcorper leo.
+        
+        <div class="header-bottom">
+            <div class="header-desc">
+                Curabitur vitae odio pretium, volutpat augue efficitur, ullamcorper ante. Nunc ultrices eget urna in aliquet. Nulla at ullamcorper leo. Aliquam egestas non lacus sed tempor.
+            </div>
         </div>
     </header>
 
