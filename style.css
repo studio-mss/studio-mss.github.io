@@ -62,7 +62,8 @@ header {
 /* 오른쪽 설명글 */
 .header-desc { 
     font-family: 'Noto Serif KR', serif; font-size: 0.9rem; line-height: 1.4; color: #333; 
-    width: 60%; word-break: keep-all; text-align: justify;
+    width: 30%; /* [여기만 수정] 60% -> 30% */
+    word-break: keep-all; text-align: justify;
 }
 
 /* 모바일 대응 */
