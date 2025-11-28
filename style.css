@@ -36,7 +36,7 @@ header {
 }
 .filter-btn { 
     font-family: 'Pretendard', sans-serif; font-size: 1rem; 
-    font-weight: 700; /* [수정] 500 -> 700 (더 두껍게) */
+    font-weight: 500; /* [수정] 500 -> 700 (더 두껍게) */  /* [재수정] 700 -> 500 */
     cursor: pointer; color: #000; text-decoration: none;
 }
 .filter-btn:hover { text-decoration: underline; }
