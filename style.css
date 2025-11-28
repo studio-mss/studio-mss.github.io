@@ -58,7 +58,7 @@ header {
 /* [수정됨] 설명글 너비 50%로 축소 (오른쪽 쏠림 효과) */
 .header-desc { 
     font-family: 'Noto Serif KR', serif; font-size: 0.9rem; line-height: 1.4; color: #333; 
-    width: 50%; /* 여기가 핵심! 60% -> 50%로 줄여서 오른쪽 끝에 붙임 */
+    width: 42%; /* 여기가 핵심! 60% -> 42%로 줄여서 오른쪽 끝에 붙임 */
     word-break: keep-all; text-align: justify;
 }
 
