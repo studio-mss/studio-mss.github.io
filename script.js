@@ -1,6 +1,8 @@
 /* script.js */
 
+// ============================================================
 // [DATABASE]
+// ============================================================
 const row1_data = [
     { title: "Project Alpha", desc: "Arch / 2024", color: "#999999", bigText: "1-1", type: "Medium" },
     { title: "Beta House",    desc: "Int / 2023",  color: "#aaaaaa", bigText: "1-2", type: "Syntax" },
@@ -20,27 +22,156 @@ const row3_data = [
     { title: "Iron Works",  desc: "Art / 2022", color: "#888888", bigText: "3-4", type: "Scale" },
 ];
 
-// 전역 변수로 관리 (필터링 시 기존 애니메이션 취소용)
+// 전역 변수 (필터 변경 시 애니메이션 초기화용)
 let animations = [];
 
-// [RENDER ENGINE]
+// ============================================================
+// [PHYSICS ENGINE] 관성 스크롤 클래스
+// ============================================================
+class InertiaMarquee {
+    constructor(element, baseSpeed) {
+        this.el = element;
+        this.baseSpeed = baseSpeed; // 기본 흐름 속도 (예: 0.5)
+        this.currentPos = 0;
+        this.velocity = -baseSpeed; // 현재 속도
+        this.targetVelocity = -baseSpeed; // 목표 속도 (원래 흐름)
+        
+        this.isDragging = false;
+        this.isHovered = false;
+        
+        this.startX = 0;
+        this.lastX = 0;
+        this.lastMouseX = 0; // 관성 계산용 마지막 마우스 위치
+        
+        this.rafId = null;
+        this.totalWidth = 0;
+
+        // 로딩 후 길이 계산
+        setTimeout(() => {
+            if (this.el.children.length > 0) {
+                // 3배수 복사했으므로 전체의 1/3이 1세트 길이
+                this.totalWidth = this.el.scrollWidth / 3;
+            }
+        }, 500);
+
+        this.initEvents();
+        this.animate();
+    }
+
+    // 부드러운 감속/가속 공식 (Linear Interpolation)
+    lerp(start, end, factor) {
+        return start + (end - start) * factor;
+    }
+
+    initEvents() {
+        // 호버 체크
+        this.el.addEventListener('mouseenter', () => { this.isHovered = true; });
+        this.el.addEventListener('mouseleave', () => { 
+            this.isHovered = false; 
+            this.isDragging = false; 
+        });
+
+        // --- 마우스 이벤트 ---
+        this.el.addEventListener('mousedown', (e) => {
+            this.isDragging = true;
+            this.startX = e.pageX;
+            this.lastX = this.currentPos;
+            this.lastMouseX = e.pageX;
+            this.velocity = 0; // 드래그 시작하면 기존 속도 초기화
+            this.el.style.cursor = 'grabbing';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!this.isDragging) return;
+            e.preventDefault();
+            
+            const diff = e.pageX - this.startX;
+            this.currentPos = this.lastX + diff;
+            
+            // 관성을 위해 놓기 직전의 속도 계산 (현재위치 - 직전위치)
+            this.velocity = e.pageX - this.lastMouseX; 
+            this.lastMouseX = e.pageX;
+        });
+
+        window.addEventListener('mouseup', () => {
+            if(this.isDragging) {
+                this.isDragging = false;
+                this.el.style.cursor = 'grab';
+            }
+        });
+
+        // --- 모바일 터치 이벤트 ---
+        this.el.addEventListener('touchstart', (e) => {
+            this.isDragging = true;
+            this.startX = e.touches[0].pageX;
+            this.lastX = this.currentPos;
+            this.lastMouseX = e.touches[0].pageX;
+            this.velocity = 0;
+        });
+
+        this.el.addEventListener('touchmove', (e) => {
+            if (!this.isDragging) return;
+            const diff = e.touches[0].pageX - this.startX;
+            this.currentPos = this.lastX + diff;
+            
+            this.velocity = e.touches[0].pageX - this.lastMouseX;
+            this.lastMouseX = e.touches[0].pageX;
+        });
+
+        this.el.addEventListener('touchend', () => {
+            this.isDragging = false;
+        });
+    }
+
+    animate() {
+        if (!this.isDragging) {
+            // 1. 목표 속도 설정
+            // 마우스가 올라가 있으면 0 (멈춤), 아니면 기본 속도로 흐름
+            let target = this.isHovered ? 0 : -this.baseSpeed;
+
+            // 2. 현재 속도를 목표 속도로 부드럽게 변경 (관성 효과 핵심)
+            // 0.05는 마찰계수 (작을수록 더 많이 미끄러짐)
+            this.velocity = this.lerp(this.velocity, target, 0.05);
+
+            // 3. 위치 업데이트
+            this.currentPos += this.velocity;
+        }
+
+        // 4. 무한 스크롤 텔레포트 (Loop)
+        if (this.totalWidth > 0) {
+            if (this.currentPos <= -this.totalWidth) {
+                this.currentPos += this.totalWidth;
+            } else if (this.currentPos > 0) {
+                this.currentPos -= this.totalWidth;
+            }
+        }
+
+        // 5. 화면 그리기
+        this.el.style.transform = `translateX(${this.currentPos}px)`;
+
+        this.rafId = requestAnimationFrame(this.animate.bind(this));
+    }
+
+    destroy() {
+        cancelAnimationFrame(this.rafId);
+    }
+}
+
+// ============================================================
+// [RENDER & FILTER]
+// ============================================================
 function renderMarquee(trackId, dataList, speed) {
     const container = document.getElementById(trackId);
     if (!container) return;
-
-    // 초기화
     container.innerHTML = "";
     
-    // 데이터 없으면 종료
     if (dataList.length === 0) return;
 
-    // 1. 데이터 증식 (무한 스크롤 및 드래그를 위해 충분히 길게 복사)
+    // 데이터 증식 (무한 스크롤용 3배수 복사)
     let filledList = [...dataList];
-    while (filledList.length < 20) { filledList = filledList.concat(dataList); }
-    // 드래그를 위해 앞뒤로 넉넉하게 3배수로 만듦
+    while (filledList.length < 30) { filledList = filledList.concat(dataList); }
     filledList = filledList.concat(filledList).concat(filledList);
 
-    // 2. HTML 생성
     let htmlCode = "";
     filledList.forEach(item => {
         htmlCode += `
@@ -60,112 +191,13 @@ function renderMarquee(trackId, dataList, speed) {
     });
     container.innerHTML = htmlCode;
 
-    // 3. 드래그 & 스크롤 로직 적용 (Class 인스턴스 생성)
-    const marquee = new DraggableMarquee(container, speed);
+    // 물리 엔진 장착
+    const marquee = new InertiaMarquee(container, speed);
     animations.push(marquee);
 }
 
-// [PHYSICS ENGINE] 드래그 및 애니메이션 처리 클래스
-class DraggableMarquee {
-    constructor(element, baseSpeed) {
-        this.el = element;
-        this.baseSpeed = baseSpeed; // 기본 속도 (양수: 왼쪽이동)
-        this.currentPos = 0;
-        this.isDragging = false;
-        this.startX = 0;
-        this.lastX = 0;
-        this.rafId = null;
-        this.isHovered = false;
-
-        // 전체 길이 계산 (한 세트의 길이)
-        // 로딩 타이밍 이슈 방지를 위해 잠시 대기 후 계산
-        setTimeout(() => {
-            this.totalWidth = this.el.scrollWidth / 3; // 3배수 했으므로 1/3이 원본 길이
-        }, 100);
-
-        this.initEvents();
-        this.animate();
-    }
-
-    initEvents() {
-        // 마우스 호버 시 멈춤 (드래그 중이 아닐 때만)
-        this.el.addEventListener('mouseenter', () => { this.isHovered = true; });
-        this.el.addEventListener('mouseleave', () => { 
-            this.isHovered = false; 
-            this.isDragging = false; // 밖으로 나가면 드래그 해제
-        });
-
-        // 드래그 시작 (PC)
-        this.el.addEventListener('mousedown', (e) => {
-            this.isDragging = true;
-            this.startX = e.pageX;
-            this.lastX = this.currentPos;
-            this.el.style.cursor = 'grabbing';
-        });
-
-        // 드래그 이동 (PC)
-        window.addEventListener('mousemove', (e) => {
-            if (!this.isDragging) return;
-            const diff = e.pageX - this.startX; // 이동 거리
-            this.currentPos = this.lastX + diff; // 위치 업데이트
-        });
-
-        // 드래그 종료 (PC)
-        window.addEventListener('mouseup', () => {
-            this.isDragging = false;
-            if(this.el) this.el.style.cursor = 'grab';
-        });
-
-        // 모바일 터치 지원
-        this.el.addEventListener('touchstart', (e) => {
-            this.isDragging = true;
-            this.startX = e.touches[0].pageX;
-            this.lastX = this.currentPos;
-        });
-        this.el.addEventListener('touchmove', (e) => {
-            if (!this.isDragging) return;
-            const diff = e.touches[0].pageX - this.startX;
-            this.currentPos = this.lastX + diff;
-        });
-        this.el.addEventListener('touchend', () => {
-            this.isDragging = false;
-        });
-    }
-
-    animate() {
-        // 드래그 중이 아니면 계속 흐름
-        if (!this.isDragging && !this.isHovered) {
-            this.currentPos -= this.baseSpeed;
-        }
-
-        // 무한 루프 로직 (텔레포트)
-        if (this.totalWidth) {
-            // 너무 왼쪽으로 갔으면 원점 복귀
-            if (this.currentPos <= -this.totalWidth) {
-                this.currentPos += this.totalWidth;
-            }
-            // 너무 오른쪽으로 갔으면(거꾸로 드래그) 끝으로 복귀
-            if (this.currentPos > 0) {
-                this.currentPos -= this.totalWidth;
-            }
-        }
-
-        // 실제 이동 적용
-        this.el.style.transform = `translateX(${this.currentPos}px)`;
-
-        // 다음 프레임 요청
-        this.rafId = requestAnimationFrame(this.animate.bind(this));
-    }
-
-    // 필터 변경 시 애니메이션 끄기용
-    destroy() {
-        cancelAnimationFrame(this.rafId);
-    }
-}
-
-// [FILTER LOGIC]
 function filterBy(filterType) {
-    // 기존 애니메이션 모두 중단 (중복 실행 방지)
+    // 기존 애니메이션 클리어
     animations.forEach(anim => anim.destroy());
     animations = [];
 
@@ -187,11 +219,11 @@ function filterBy(filterType) {
         f3 = row3_data.filter(item => item.type === filterType);
     }
 
-    // 렌더링 (속도 조절 가능: 숫자가 클수록 빠름. 0.5는 아주 느림)
-    renderMarquee('track-1', f1, 0.5); 
-    renderMarquee('track-2', f2, 0.6); // 약간 다르게
-    renderMarquee('track-3', f3, 0.4); // 약간 다르게
+    // 속도 설정 (숫자가 클수록 빠름. 0.5~0.8 추천)
+    renderMarquee('track-1', f1, 0.6); 
+    renderMarquee('track-2', f2, 0.7); 
+    renderMarquee('track-3', f3, 0.5); 
 }
 
-// 초기 실행
+// 시작
 filterBy('All');
