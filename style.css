@@ -62,17 +62,48 @@ header {
     word-break: keep-all; text-align: justify;
 }
 
-/* 모바일 대응 (좁아지면 다시 꽉 차게) */
+/* style.css 맨 아래 모바일 대응 부분 교체 */
+
+/* 모바일 대응 (좁은 화면 디자인 수정) */
 @media (max-width: 768px) {
-    header { padding: 0 1rem; }
-    .header-top { flex-direction: column; gap: 10px; align-items: center; }
-    .brand-name, .filter-menu, .date-text { flex: auto; width: 100%; text-align: center; justify-content: center; }
+    header { padding: 0 1.2rem; }
     
-    .header-bottom { flex-direction: column; gap: 10px; align-items: flex-start; }
-    .header-subtitle { width: 100%; margin-bottom: 5px; }
+    /* 1. 상단 정렬: 세로로 쌓되 간격을 조절 */
+    .header-top { 
+        flex-direction: column; 
+        gap: 8px; /* 요소 간 간격 좁힘 */
+        align-items: center; 
+        padding: 1.5rem 0 1rem 0; /* 위쪽 여백 확보 */
+    }
+
+    /* 2. 로고: 가장 강하게 */
+    .brand-name { 
+        flex: auto; width: 100%; text-align: center; 
+        font-size: 1.6rem; /* 조금 더 키움 */
+        margin-bottom: 5px; /* 메뉴와 거리 두기 */
+    }
+
+    /* 3. 메뉴: 중간 강도 */
+    .filter-menu { 
+        flex: auto; width: 100%; justify-content: center; 
+        gap: 20px; /* 버튼 사이 간격 넓힘 (터치 편하게) */
+    }
+    .filter-btn { font-size: 0.95rem; }
+
+    /* 4. [핵심] 날짜: 아주 가볍게 (힘 빼기) */
+    .date-text { 
+        flex: auto; width: 100%; text-align: center; 
+        font-size: 0.75rem; /* 크기 작게 */
+        font-weight: 400; /* 얇게 */
+        color: #999; /* 연한 회색으로 변경 */
+        margin-top: 5px; /* 메뉴와 살짝 거리 두기 */
+        letter-spacing: 0.05em; /* 자간 살짝 넓혀서 세련되게 */
+    }
     
-    /* 모바일에서는 다시 넓게 */
-    .header-desc { width: 100%; font-size: 0.8rem; }
+    /* 5. 하단 설명글 */
+    .header-bottom { flex-direction: column; gap: 15px; align-items: flex-start; padding: 1rem 0; }
+    .header-subtitle { width: 100%; margin-bottom: 0; font-size: 1rem; }
+    .header-desc { width: 100%; font-size: 0.85rem; line-height: 1.5; color: #555; }
 }
 
 /* === Content & Marquee === */
