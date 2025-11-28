@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Studio MSS</title>
+    <title>Studio MS²</title>
     
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;500;700&display=swap" rel="stylesheet">
@@ -12,59 +12,83 @@
         /* === Global Reset === */
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #fff; overflow: hidden; }
         
-        /* === Layout === */
+        /* === [NEW] Header System (15% Height) === */
+        header {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 18vh; /* 상단 15~18% 확보 */
+            background: #fff;
+            border-bottom: 1px solid #000; /* 하단 라인 */
+            z-index: 100; /* 맨 위에 뜨도록 */
+            padding: 2vh 3vh;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .header-top {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            font-family: 'Pretendard', sans-serif;
+            font-weight: 700; font-size: 2vh; color: #000;
+        }
+
+        .brand-name { cursor: pointer; } /* 로고 누르면 초기화 */
+
+        /* 필터 메뉴 스타일 */
+        .filter-menu {
+            display: flex; gap: 20px;
+        }
+        .filter-btn {
+            cursor: pointer; text-decoration: none; color: #000;
+            position: relative;
+        }
+        .filter-btn:hover { text-decoration: underline; color: #666; }
+        .filter-btn.active { text-decoration: underline; font-weight: 800; }
+
+        /* 로렘 입섬 텍스트 영역 */
+        .header-desc {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.4vh; line-height: 1.6; color: #333;
+            width: 60%; /* 가로 폭 제한 */
+            word-break: keep-all;
+        }
+
+        /* === Layout (Padding Adjusted) === */
         .full-screen-wrapper {
             width: 100%; height: 100vh;
             display: flex; flex-direction: column; justify-content: center;
-            padding-top: 5vh;
+            padding-top: 18vh; /* 헤더 높이만큼 띄워줌 */
         }
 
-        .marquee-row {
-            white-space: nowrap; font-size: 0; margin-bottom: 3vh; display: flex; width: max-content;
-        }
-        
-        /* 속도 조절 */
+        /* === Marquee Logic === */
+        .marquee-row { white-space: nowrap; font-size: 0; margin-bottom: 3vh; display: flex; width: max-content; }
         .row-1 { animation: scroll-left 150s linear infinite; }
         .row-2 { animation: scroll-left 170s linear infinite; }
         .row-3 { animation: scroll-left 190s linear infinite; }
-
         @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .marquee-row:hover { animation-play-state: paused; }
 
-        /* === Component: Box (No Images) === */
+        /* === Component: Box === */
         .box-container {
             flex: 0 0 auto; position: relative;
             width: 25vh; height: 25vh; margin-right: 2vh;
             overflow: hidden;
         }
-
-        /* 1. 기본 색깔 박스 + 큰 숫자 */
         .box-base {
             width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center; /* 정중앙 정렬 */
+            display: flex; justify-content: center; align-items: center;
             font-family: 'Pretendard', sans-serif;
-            font-size: 8vh; /* 큰 글씨 크기 */
-            font-weight: 700; 
-            color: #fff; /* 글자색 흰색 */
+            font-size: 8vh; font-weight: 700; color: #fff;
         }
-
-        /* 2. 검은색 오버레이 (마우스 올리면 나옴) */
         .box-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #000; /* 완전 검은색 */
+            background-color: #000; opacity: 0; transition: opacity 0.3s ease; z-index: 10;
             display: flex; justify-content: center; align-items: center;
-            opacity: 0; transition: opacity 0.3s ease; z-index: 10;
         }
-        
-        /* 오버레이 안의 글씨 ("View") */
-        .overlay-text {
-            font-family: 'Pretendard', sans-serif;
-            font-size: 3vh; font-weight: 500; color: #fff;
-        }
-
+        .overlay-text { font-family: 'Pretendard', sans-serif; font-size: 3vh; font-weight: 500; color: #fff; }
         .box-container:hover .box-overlay { opacity: 1; }
 
-        /* === Typography (Capsions) === */
+        /* Typography */
         .caption-box {
             position: absolute; bottom: 0; left: 0; width: 100%;
             padding: 15px; box-sizing: border-box; z-index: 20; pointer-events: none;
@@ -82,6 +106,21 @@
 </head>
 <body>
 
+    <header>
+        <div class="header-top">
+            <div class="brand-name" onclick="filterBy('All')">Studio MS²</div>
+            <div class="filter-menu">
+                <div class="filter-btn" onclick="filterBy('Medium')">Medium</div>
+                <div class="filter-btn" onclick="filterBy('Syntax')">Syntax</div>
+                <div class="filter-btn" onclick="filterBy('Scale')">Scale</div>
+            </div>
+            <div style="font-size: 1.5vh;">2025.11.28</div>
+        </div>
+        <div class="header-desc">
+            Curabitur vitae odio pretium, volutpat augue efficitur, ullamcorper ante. Nunc ultrices eget urna in aliquet. Nulla at ullamcorper leo. Aliquam egestas non lacus sed tempor. Ut bibendum mauris sit amet augue mollis, et tincidunt nisi gravida.
+        </div>
+    </header>
+
     <div class="full-screen-wrapper">
         <div class="marquee-row row-1" id="track-1"></div>
         <div class="marquee-row row-2" id="track-2"></div>
@@ -90,41 +129,47 @@
 
     <script>
         // ============================================================
-        // [DATABASE] : 이제 이미지 주소 말고 '색상코드'와 '큰 글씨'를 넣으세요.
+        // [DATABASE] 프로젝트 데이터 + "type" 태그 추가됨
+        // type: "Medium", "Syntax", "Scale" 중 하나를 골라 넣으세요.
         // ============================================================
         
-        // Data: Row 1
         const row1_data = [
-            // color: 배경색 (#999999 등), bigText: 가운데 큰 글씨 (1-1 등)
-            { title: "Project Alpha", desc: "Arch / 2024", color: "#999999", bigText: "1-1" },
-            { title: "Beta House",    desc: "Int / 2023",  color: "#aaaaaa", bigText: "1-2" },
-            { title: "Gamma Villa",   desc: "Des / 2025",  color: "#bbbbbb", bigText: "1-3" },
+            { title: "Project Alpha", desc: "Arch / 2024", color: "#999999", bigText: "1-1", type: "Medium" },
+            { title: "Beta House",    desc: "Int / 2023",  color: "#aaaaaa", bigText: "1-2", type: "Syntax" },
+            { title: "Gamma Villa",   desc: "Des / 2025",  color: "#bbbbbb", bigText: "1-3", type: "Scale" },
         ];
 
-        // Data: Row 2
         const row2_data = [
-            { title: "Neon City",  desc: "Urb / 2024", color: "#888888", bigText: "2-1" },
-            { title: "Cyber Loft", desc: "Ren / 2023", color: "#999999", bigText: "2-2" },
+            { title: "Neon City",  desc: "Urb / 2024", color: "#888888", bigText: "2-1", type: "Medium" },
+            { title: "Cyber Loft", desc: "Ren / 2023", color: "#999999", bigText: "2-2", type: "Syntax" },
         ];
 
-        // Data: Row 3
         const row3_data = [
-            { title: "Dark Matter", desc: "Exh / 2024", color: "#555555", bigText: "3-1" },
-            { title: "Gray Scale",  desc: "Pho / 2025", color: "#666666", bigText: "3-2" },
-            { title: "Steel Frame", desc: "Con / 2023", color: "#777777", bigText: "3-3" },
-            { title: "Iron Works",  desc: "Art / 2022", color: "#888888", bigText: "3-4" },
+            { title: "Dark Matter", desc: "Exh / 2024", color: "#555555", bigText: "3-1", type: "Scale" },
+            { title: "Gray Scale",  desc: "Pho / 2025", color: "#666666", bigText: "3-2", type: "Medium" },
+            { title: "Steel Frame", desc: "Con / 2023", color: "#777777", bigText: "3-3", type: "Syntax" },
+            { title: "Iron Works",  desc: "Art / 2022", color: "#888888", bigText: "3-4", type: "Scale" },
         ];
 
         // ============================================================
-        // [LOGIC] Auto-Generator (CSS Box Version)
+        // [ENGINE] 필터링 및 자동 생성기
         // ============================================================
-        function autoFillMarquee(trackId, dataList) {
+        
+        // 1. 그리기 함수 (데이터를 받아서 화면에 뿌림)
+        function renderMarquee(trackId, dataList) {
             const container = document.getElementById(trackId);
-            if(!container || dataList.length === 0) return;
+            if(!container) return;
+            
+            // 데이터가 없으면 비워두기 (혹은 안내문구)
+            if(dataList.length === 0) {
+                container.innerHTML = "";
+                return;
+            }
 
+            // 화면 꽉 찰 때까지 복제 (최소 30개)
             let filledList = [...dataList];
             while (filledList.length < 30) { filledList = filledList.concat(dataList); }
-            filledList = filledList.concat(filledList);
+            filledList = filledList.concat(filledList); // 더블링
 
             let htmlCode = "";
             filledList.forEach(item => {
@@ -133,11 +178,9 @@
                         <div class="box-base" style="background-color: ${item.color};">
                             ${item.bigText}
                         </div>
-                        
                         <div class="box-overlay">
-                            <span class="overlay-text">View</span>
+                            <span class="overlay-text">${item.type}</span>
                         </div>
-
                         <div class="caption-box">
                             <div class="title-text">${item.title}</div><br>
                             <div class="desc-text">${item.desc}</div>
@@ -148,9 +191,39 @@
             container.innerHTML = htmlCode;
         }
 
-        autoFillMarquee('track-1', row1_data);
-        autoFillMarquee('track-2', row2_data);
-        autoFillMarquee('track-3', row3_data);
+        // 2. 필터 함수 (버튼 누르면 실행)
+        function filterBy(filterType) {
+            console.log("Filtering by:", filterType); // 확인용 로그
+
+            // 버튼 스타일 활성화
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                if(btn.innerText === filterType) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+
+            // 데이터 걸러내기
+            let f1, f2, f3;
+
+            if (filterType === 'All') {
+                f1 = row1_data;
+                f2 = row2_data;
+                f3 = row3_data;
+            } else {
+                f1 = row1_data.filter(item => item.type === filterType);
+                f2 = row2_data.filter(item => item.type === filterType);
+                f3 = row3_data.filter(item => item.type === filterType);
+            }
+
+            // 다시 그리기
+            renderMarquee('track-1', f1);
+            renderMarquee('track-2', f2);
+            renderMarquee('track-3', f3);
+        }
+
+        // 3. 초기 실행 (처음엔 전부 다 보여줌)
+        filterBy('All');
+
     </script>
 </body>
 </html>
