@@ -52,12 +52,21 @@ function renderMarquee(trackId, dataList) {
 }
 
 function filterBy(filterType) {
+    // 1. 버튼 활성화 스타일 변경
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => {
         if(btn.innerText === filterType) btn.classList.add('active');
         else btn.classList.remove('active');
     });
 
+    // 2. [NEW] 왼쪽 소제목(Subtitle) 변경 기능
+    const label = document.getElementById('current-filter-label');
+    if (label) {
+        if (filterType === 'All') label.innerText = "All Projects"; // 기본값
+        else label.innerText = filterType; // 선택한 필터명 (Medium, Syntax...)
+    }
+
+    // 3. 데이터 필터링 및 렌더링
     let f1, f2, f3;
     if (filterType === 'All') {
         f1 = row1_data; f2 = row2_data; f3 = row3_data;
@@ -71,5 +80,5 @@ function filterBy(filterType) {
     renderMarquee('track-3', f3);
 }
 
-// Initial Run
+// 초기 실행
 filterBy('All');
