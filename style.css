@@ -6,97 +6,34 @@
 body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #fff; overflow: hidden; }
 body { display: flex; flex-direction: column; }
 
-/* === Header System === */
+/* === Header === */
 header {
-    flex: 0 0 auto; width: 100%;
-    background: #fff;
-    z-index: 100;
-    padding: 0 2rem; /* 좌우 여백 */
-    display: flex; flex-direction: column;
+    flex: 0 0 auto; width: 100%; background: #fff; z-index: 100;
+    padding: 0 2rem; display: flex; flex-direction: column;
 }
 
-/* 1. 상단 (좌-중-우) */
 .header-top { 
     display: flex; justify-content: space-between; align-items: center; 
-    padding: 1.2rem 0; 
-    border-bottom: 1px solid #000; 
+    padding: 1.2rem 0; border-bottom: 1px solid #000; 
 }
-
-/* 로고 (가장 두껍게: 800) */
-.brand-name { 
-    font-family: 'Pretendard', sans-serif; font-weight: 800; font-size: 1.5rem; 
-    color: #000; cursor: pointer; white-space: nowrap; 
-    flex: 1; 
-}
-
-/* 메뉴 (중간 두께: 500으로 수정) */
-.filter-menu { 
-    display: flex; gap: 30px; 
-    flex: 1; justify-content: center; 
-}
-.filter-btn { 
-    font-family: 'Pretendard', sans-serif; font-size: 1rem; 
-    font-weight: 500; /* [수정] 700 -> 500 (적당한 두께) */
-    cursor: pointer; color: #000; text-decoration: none;
-}
+.brand-name { font-family: 'Pretendard', sans-serif; font-weight: 800; font-size: 1.5rem; color: #000; cursor: pointer; white-space: nowrap; flex: 1; }
+.filter-menu { display: flex; gap: 30px; flex: 1; justify-content: center; }
+.filter-btn { font-family: 'Pretendard', sans-serif; font-size: 1rem; font-weight: 500; cursor: pointer; color: #000; text-decoration: none; }
 .filter-btn:hover { text-decoration: underline; }
-.filter-btn.active { text-decoration: underline; font-weight: 900; }
+.filter-btn.active { text-decoration: underline; font-weight: 800; }
+.date-text { font-family: 'Pretendard', sans-serif; font-weight: 600; font-size: 1rem; white-space: nowrap; flex: 1; text-align: right; letter-spacing: 0.05em; color: #999; font-weight: 400; }
 
-/* 날짜 (가장 얇게: 400 + 회색) */
-.date-text { 
-    font-family: 'Pretendard', sans-serif; 
-    font-size: 0.9rem; 
-    font-weight: 400; 
-    color: #999;      
-    white-space: nowrap; 
-    flex: 1; text-align: right; 
-    letter-spacing: 0.05em; 
-}
+.header-bottom { padding: 1.2rem 0; border-bottom: 1px solid #000; display: flex; justify-content: space-between; align-items: center; }
+.header-subtitle { font-family: 'Pretendard', sans-serif; font-weight: 700; font-size: 1.2rem; color: #000; width: 30%; }
+.header-desc { font-family: 'Noto Serif KR', serif; font-size: 0.9rem; line-height: 1.4; color: #333; width: 30%; word-break: keep-all; text-align: justify; }
 
-/* 2. 하단 (설명글) */
-.header-bottom { 
-    padding: 1.2rem 0; 
-    border-bottom: 1px solid #000; 
-    display: flex; justify-content: space-between; 
-    align-items: center; 
-}
-
-.header-subtitle {
-    font-family: 'Pretendard', sans-serif; font-weight: 700; font-size: 1.2rem;
-    color: #000; width: 30%;
-}
-
-.header-desc { 
-    font-family: 'Noto Serif KR', serif; font-size: 0.9rem; line-height: 1.4; color: #333; 
-    width: 30%; /* 너비 30% 제한 */
-    word-break: keep-all; text-align: justify;
-}
-
-/* 모바일 대응 */
 @media (max-width: 768px) {
     header { padding: 0 1.2rem; }
-    
-    .header-top { 
-        flex-direction: column; gap: 8px; align-items: center; 
-        padding: 1.5rem 0 1rem 0;
-    }
-    
-    .brand-name { 
-        flex: auto; width: 100%; text-align: center; 
-        font-size: 1.6rem; margin-bottom: 5px; 
-    }
-    
-    .filter-menu { 
-        flex: auto; width: 100%; justify-content: center; gap: 20px; 
-    }
-    .filter-btn { font-size: 0.95rem; } 
-
-    .date-text { 
-        flex: auto; width: 100%; text-align: center; 
-        font-size: 0.75rem; 
-        margin-top: 5px; 
-    }
-    
+    .header-top { flex-direction: column; gap: 8px; align-items: center; padding: 1.5rem 0 1rem 0; }
+    .brand-name { flex: auto; width: 100%; text-align: center; font-size: 1.6rem; margin-bottom: 5px; }
+    .filter-menu { flex: auto; width: 100%; justify-content: center; gap: 20px; }
+    .filter-btn { font-size: 0.95rem; }
+    .date-text { flex: auto; width: 100%; text-align: center; font-size: 0.75rem; margin-top: 5px; }
     .header-bottom { flex-direction: column; gap: 15px; align-items: flex-start; padding: 1rem 0; }
     .header-subtitle { width: 100%; margin-bottom: 0; font-size: 1rem; }
     .header-desc { width: 100%; font-size: 0.85rem; line-height: 1.5; color: #555; }
@@ -107,13 +44,20 @@ header {
     flex: 1; width: 100%; display: flex; flex-direction: column; justify-content: space-evenly;
     padding: 1vh 0; overflow: hidden;
 }
-.marquee-row { flex: 1; display: flex; align-items: center; white-space: nowrap; width: max-content; }
-.row-1 { animation: scroll-left 400s linear infinite; }
-.row-2 { animation: scroll-left 450s linear infinite; }
-.row-3 { animation: scroll-left 500s linear infinite; }
-@keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-.marquee-row:hover { animation-play-state: paused; }
 
+/* [수정] CSS 애니메이션 제거 및 커서 변경 */
+.marquee-row { 
+    flex: 1; display: flex; align-items: center; white-space: nowrap; width: max-content;
+    cursor: grab; /* 손바닥 모양 커서 */
+    will-change: transform; /* 성능 최적화 */
+}
+.marquee-row:active {
+    cursor: grabbing; /* 잡았을 때 주먹 쥔 모양 */
+}
+
+/* .row-1, .row-2 애니메이션 삭제됨 (JS가 함) */
+
+/* === Components === */
 .box-container { flex: 0 0 auto; position: relative; height: 85%; aspect-ratio: 1/1; margin-right: 2vh; overflow: hidden; }
 .box-base { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-family: 'Pretendard', sans-serif; font-size: 3rem; font-weight: 700; color: #fff; }
 .box-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; opacity: 0; transition: opacity 0.3s ease; z-index: 10; display: flex; justify-content: center; align-items: center; }
