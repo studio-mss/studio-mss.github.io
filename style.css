@@ -6,7 +6,7 @@
 body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #fff; overflow: hidden; }
 body { display: flex; flex-direction: column; }
 
-/* === [Header System Re-designed] === */
+/* === Header System Re-designed === */
 header {
     flex: 0 0 auto; width: 100%;
     background: #fff;
@@ -15,22 +15,20 @@ header {
     display: flex; flex-direction: column;
 }
 
-/* 1. 상단 영역 (좌/중/우 3등분) */
+/* 1. 상단 영역 */
 .header-top { 
-    display: flex; justify-content: space-between; align-items: center; /* 수직 중앙 정렬 */
+    display: flex; justify-content: space-between; align-items: center; 
     padding: 1.2rem 0; 
-    border-bottom: 1px solid #000; /* 라인 */
+    border-bottom: 1px solid #000; 
 }
 
-/* 왼쪽 로고 */
 .brand-name { 
     font-family: 'Pretendard', sans-serif; font-weight: 800; font-size: 1.5rem; 
-    color: #000; cursor: pointer; white-space: nowrap; flex: 1; /* 왼쪽 공간 차지 */
+    color: #000; cursor: pointer; white-space: nowrap; flex: 1; 
 }
 
-/* 중앙 필터 메뉴 */
 .filter-menu { 
-    display: flex; gap: 30px; flex: 1; justify-content: center; /* 중앙 정렬 */
+    display: flex; gap: 30px; flex: 1; justify-content: center; 
 }
 .filter-btn { 
     font-family: 'Pretendard', sans-serif; font-size: 1rem; font-weight: 500; 
@@ -39,44 +37,45 @@ header {
 .filter-btn:hover { text-decoration: underline; }
 .filter-btn.active { text-decoration: underline; font-weight: 800; }
 
-/* 오른쪽 날짜 */
 .date-text { 
     font-family: 'Pretendard', sans-serif; font-weight: 600; font-size: 1rem;
-    white-space: nowrap; flex: 1; text-align: right; /* 오른쪽 정렬 */
+    white-space: nowrap; flex: 1; text-align: right; 
 }
 
-/* 2. 하단 영역 (좌우 분할 + 수직 중앙 정렬) */
+/* 2. 하단 영역 */
 .header-bottom { 
     padding: 1.2rem 0; 
-    border-bottom: 1px solid #000; /* 라인 */
+    border-bottom: 1px solid #000; 
     display: flex; justify-content: space-between; 
-    align-items: center; /* [핵심] 소제목과 설명글 수직 중앙 정렬 */
+    align-items: center; 
 }
 
-/* 왼쪽 소제목 */
 .header-subtitle {
-    font-family: 'Pretendard', sans-serif; font-weight: 700; font-size: 1.2rem; /* 크기 약간 키움 */
+    font-family: 'Pretendard', sans-serif; font-weight: 700; font-size: 1.2rem;
     color: #000; width: 30%;
 }
 
-/* 오른쪽 설명글 */
+/* [수정됨] 설명글 너비 30%로 축소 (오른쪽 쏠림 효과) */
 .header-desc { 
     font-family: 'Noto Serif KR', serif; font-size: 0.9rem; line-height: 1.4; color: #333; 
-    width: 30%; /* [여기만 수정] 60% -> 30% */
+    width: 30%; /* 여기가 핵심! 60% -> 30%로 줄여서 오른쪽 끝에 붙임 */
     word-break: keep-all; text-align: justify;
 }
 
-/* 모바일 대응 */
+/* 모바일 대응 (좁아지면 다시 꽉 차게) */
 @media (max-width: 768px) {
     header { padding: 0 1rem; }
     .header-top { flex-direction: column; gap: 10px; align-items: center; }
     .brand-name, .filter-menu, .date-text { flex: auto; width: 100%; text-align: center; justify-content: center; }
+    
     .header-bottom { flex-direction: column; gap: 10px; align-items: flex-start; }
     .header-subtitle { width: 100%; margin-bottom: 5px; }
+    
+    /* 모바일에서는 다시 넓게 */
     .header-desc { width: 100%; font-size: 0.8rem; }
 }
 
-/* === Content & Marquee (기존 유지) === */
+/* === Content & Marquee === */
 .full-screen-wrapper {
     flex: 1; width: 100%; display: flex; flex-direction: column; justify-content: space-evenly;
     padding: 1vh 0; overflow: hidden;
@@ -87,11 +86,13 @@ header {
 .row-3 { animation: scroll-left 500s linear infinite; }
 @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 .marquee-row:hover { animation-play-state: paused; }
+
 .box-container { flex: 0 0 auto; position: relative; height: 85%; aspect-ratio: 1/1; margin-right: 2vh; overflow: hidden; }
 .box-base { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-family: 'Pretendard', sans-serif; font-size: 3rem; font-weight: 700; color: #fff; }
 .box-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; opacity: 0; transition: opacity 0.3s ease; z-index: 10; display: flex; justify-content: center; align-items: center; }
 .overlay-text { font-family: 'Pretendard', sans-serif; font-size: 1.2rem; font-weight: 500; color: #fff; }
 .box-container:hover .box-overlay { opacity: 1; }
+
 .caption-box { position: absolute; bottom: 0; left: 0; width: 100%; padding: 10px; z-index: 20; pointer-events: none; }
 .title-text { font-family: 'Pretendard', sans-serif; font-size: 0.9rem; font-weight: 700; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.5); display: block; margin-bottom: 2px; }
 .desc-text { font-family: 'Noto Serif KR', serif; font-size: 0.75rem; font-weight: 400; color: #ddd; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
