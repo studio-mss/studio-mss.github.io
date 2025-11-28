@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio MSS</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* === CSS 스타일 (디자인) === */
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #fff; overflow: hidden; }
+        
+        /* 전체 레이아웃 */
+        .full-screen-wrapper {
+            width: 100%; height: 100vh;
+            display: flex; flex-direction: column; justify-content: center;
+            padding-top: 5vh;
+        }
+
+        /* 기차 레일 */
+        .marquee-row {
+            white-space: nowrap; font-size: 0; margin-bottom: 3vh; display: flex; width: max-content;
+        }
+        
+        /* 속도 조절: 숫자가 클수록 느림 (취향껏 조절 가능) */
+        .row-1 { animation: scroll-left 150s linear infinite; }
+        .row-2 { animation: scroll-left 170s linear infinite; }
+        .row-3 { animation: scroll-left 190s linear infinite; }
+
+        @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .marquee-row:hover { animation-play-state: paused; }
+
+        /* 이미지 박스 */
+        .img-box {
+            flex: 0 0 auto; position: relative;
+            width: 25vh; height: 25vh; margin-right: 2vh;
+            overflow: hidden;
+        }
+
+        .img-base { width: 100%; height: 100%; object-fit: cover; display: block; }
+        
+        /* 검은 박스 (호버) */
+        .img-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; opacity: 0; transition: opacity 0.3s ease; z-index: 10;
+        }
+        .img-box:hover .img-overlay { opacity: 1; }
+
+        /* 텍스트 캡션 */
+        .caption-box {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            padding: 15px; box-sizing: border-box; z-index: 20; pointer-events: none;
+        }
+        .title-text {
+            font-family: 'Pretendard', sans-serif; font-size: 14px; font-weight: 700;
+            color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            display: inline-block; margin-bottom: 4px;
+        }
+        .desc-text {
+            font-family: 'Noto Serif KR', serif; font-size: 12px;
+            color: #ddd; text-shadow: 0 1px 3px rgba(0,0,0,0.5); display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="full-screen-wrapper">
+        <div class="marquee-row row-1" id="track-1"></div>
+        <div class="marquee-row row-2" id="track-2"></div>
+        <div class="marquee-row row-3" id="track-3"></div>
+    </div>
+
+    <script>
+        /* === JS 자동화 엔진 === */
+        
+        // [1번 줄 데이터]
+        const row1_data = [
+            { title: "Project Alpha", desc: "Arch / 24", img: "https://placehold.co/500x500/999999?text=1-1", hover: "https://placehold.co/500x500/000?text=View" },
+            { title: "Beta House",    desc: "Int / 23",  img: "https://placehold.co/500x500/aaaaaa?text=1-2", hover: "https://placehold.co/500x500/000?text=View" },
+            { title: "Gamma Villa",   desc: "Des / 25",  img: "https://placehold.co/500x500/bbbbbb?text=1-3", hover: "https://placehold.co/500x500/000?text=View" },
+        ];
+
+        // [2번 줄 데이터]
+        const row2_data = [
+            { title: "Neon City",  desc: "Urb / 24", img: "https://placehold.co/500x500/888888?text=2-1", hover: "https://placehold.co/500x500/000?text=View" },
+            { title: "Cyber Loft", desc: "Ren / 23", img: "https://placehold.co/500x500/999999?text=2-2", hover: "https://placehold.co/500x500/000?text=View" },
+        ];
+
+        // [3번 줄 데이터]
+        const row3_data = [
+            { title: "Dark Matter", desc: "Exh / 24", img: "https://placehold.co/500x500/555555?text=3-1", hover: "https://placehold.co/500x500/000?text=View" },
+            { title: "Gray Scale",  desc: "Pho / 25", img: "https://placehold.co/500x500/666666?text=3-2", hover: "https://placehold.co/500x500/000?text=View" },
+            { title: "Steel Frame", desc: "Con / 23", img: "https://placehold.co/500x500/777777?text=3-3", hover: "https://placehold.co/500x500/000?text=View" },
+        ];
+
+        // 자동 복사기 함수
+        function autoFillMarquee(trackId, dataList) {
+            const container = document.getElementById(trackId);
+            if(!container || dataList.length === 0) return;
+
+            let filledList = [...dataList];
+            // 30개 넘을 때까지 계속 복사
+            while (filledList.length < 30) {
+                filledList = filledList.concat(dataList);
+            }
+            // 끊김 방지용 더블링
+            filledList = filledList.concat(filledList);
+
+            let htmlCode = "";
+            filledList.forEach(item => {
+                htmlCode += `
+                    <div class="img-box">
+                        <img src="${item.img}" class="img-base">
+                        <img src="${item.hover}" class="img-overlay">
+                        <div class="caption-box">
+                            <div class="title-text">${item.title}</div><br>
+                            <div class="desc-text">${item.desc}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = htmlCode;
+        }
+
+        autoFillMarquee('track-1', row1_data);
+        autoFillMarquee('track-2', row2_data);
+        autoFillMarquee('track-3', row3_data);
+    </script>
+</body>
+</html>
