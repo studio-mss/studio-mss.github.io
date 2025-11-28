@@ -55,10 +55,10 @@ header {
     color: #000; width: 30%;
 }
 
-/* [수정됨] 너비 40%로 확장 */
+/* [수정됨] 너비 50%로 확장 */
 .header-desc { 
     font-family: 'Noto Serif KR', serif; font-size: 0.9rem; line-height: 1.4; color: #333; 
-    width: 40%; /* 30% -> 40% 변경 */
+    width: 50%; /* 40% -> 50% 변경 */
     word-break: keep-all; text-align: justify;
 }
 
@@ -101,8 +101,6 @@ header {
     cursor: grab; will-change: transform; 
 }
 .marquee-row:active { cursor: grabbing; }
-
-/* .row-1, 2, 3 애니메이션은 JS에서 제어하므로 CSS 삭제됨 */
 
 .box-container { flex: 0 0 auto; position: relative; height: 85%; aspect-ratio: 1/1; margin-right: 2vh; overflow: hidden; }
 .box-base { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-family: 'Pretendard', sans-serif; font-size: 3rem; font-weight: 700; color: #fff; }
