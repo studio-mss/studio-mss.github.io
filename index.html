@@ -4,24 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Studio MSS</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css">
+    
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;500;700&display=swap" rel="stylesheet">
     
     <style>
-        /* === CSS 스타일 === */
+        /* === Global Reset === */
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #fff; overflow: hidden; }
         
+        /* === Layout System === */
         .full-screen-wrapper {
             width: 100%; height: 100vh;
             display: flex; flex-direction: column; justify-content: center;
             padding-top: 5vh;
         }
 
+        /* === Marquee Logic === */
         .marquee-row {
             white-space: nowrap; font-size: 0; margin-bottom: 3vh; display: flex; width: max-content;
         }
         
-        /* 속도 조절 (150초~190초) */
+        /* Parameter: Speed Control */
         .row-1 { animation: scroll-left 150s linear infinite; }
         .row-2 { animation: scroll-left 170s linear infinite; }
         .row-3 { animation: scroll-left 190s linear infinite; }
@@ -29,22 +32,23 @@
         @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .marquee-row:hover { animation-play-state: paused; }
 
+        /* === Component: Image Box === */
         .img-box {
             flex: 0 0 auto; position: relative;
             width: 25vh; height: 25vh; margin-right: 2vh;
             overflow: hidden;
-            background-color: #ccc; /* [안전장치] 이미지 로딩 실패시 회색 배경 보임 */
+            background-color: #e0e0e0; /* Default Placeholder Color */
         }
 
         .img-base { 
             width: 100%; height: 100%; object-fit: cover; display: block; 
-            background-color: #ccc; /* 배경색 이중 적용 */
         }
         
-        /* [긴급 수정] 깨진 이미지 아이콘 숨기기 */
+        /* Error Handling: Hide Broken Icon */
         img[src=""], img:not([src]) { opacity: 0; }
-        img { text-indent: -9999px; } /* 텍스트 숨김 */
+        img { text-indent: -9999px; }
 
+        /* Interaction: Overlay */
         .img-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             object-fit: cover; opacity: 0; transition: opacity 0.3s ease; z-index: 10;
@@ -52,18 +56,32 @@
         }
         .img-box:hover .img-overlay { opacity: 1; }
 
+        /* === Typography System === */
         .caption-box {
             position: absolute; bottom: 0; left: 0; width: 100%;
             padding: 15px; box-sizing: border-box; z-index: 20; pointer-events: none;
         }
+        
+        /* Font: Pretendard (Modern/Sans) */
         .title-text {
-            font-family: 'Pretendard', sans-serif; font-size: 14px; font-weight: 700;
-            color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            font-size: 14px; 
+            font-weight: 700; /* Bold */
+            color: #fff; 
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
             display: inline-block; margin-bottom: 4px;
+            letter-spacing: -0.02em;
         }
+        
+        /* Font: Noto Serif KR (Classic/Serif) */
         .desc-text {
-            font-family: 'Noto Serif KR', serif; font-size: 12px;
-            color: #ddd; text-shadow: 0 1px 3px rgba(0,0,0,0.5); display: inline-block;
+            font-family: 'Noto Serif KR', serif;
+            font-size: 12px;
+            font-weight: 400; /* Regular */
+            color: #ddd; 
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5); 
+            display: inline-block;
+            letter-spacing: -0.01em;
         }
     </style>
 </head>
@@ -76,33 +94,45 @@
     </div>
 
     <script>
-        // 서버 변경: dummyimage.com 사용 (더 안정적임)
+        // ============================================================
+        // [DATABASE] Project Parameters
+        // 주인님은 여기만 수정하면 됩니다. UI는 자동으로 반응합니다.
+        // ============================================================
+        
+        // Data: Row 1
         const row1_data = [
-            { title: "Project Alpha", desc: "Arch / 24", img: "https://dummyimage.com/500x500/999/fff&text=1-1", hover: "https://dummyimage.com/500x500/000/fff&text=View" },
-            { title: "Beta House",    desc: "Int / 23",  img: "https://dummyimage.com/500x500/aaa/fff&text=1-2", hover: "https://dummyimage.com/500x500/000/fff&text=View" },
-            { title: "Gamma Villa",   desc: "Des / 25",  img: "https://dummyimage.com/500x500/bbb/fff&text=1-3", hover: "https://dummyimage.com/500x500/000/fff&text=View" },
+            { title: "Project Alpha", desc: "Arch / 2024", img: "https://dummyimage.com/500x500/999/fff&text=1-1", hover: "https://dummyimage.com/500x500/000/fff&text=View" },
+            { title: "Beta House",    desc: "Int / 2023",  img: "https://dummyimage.com/500x500/aaa/fff&text=1-2", hover: "https://dummyimage.com/500x500/000/fff&text=View" },
+            { title: "Gamma Villa",   desc: "Des / 2025",  img: "https://dummyimage.com/500x500/bbb/fff&text=1-3", hover: "https://dummyimage.com/500x500/000/fff&text=View" },
         ];
 
+        // Data: Row 2
         const row2_data = [
-            { title: "Neon City",  desc: "Urb / 24", img: "https://dummyimage.com/500x500/888/fff&text=2-1", hover: "https://dummyimage.com/500x500/000/fff&text=View" },
-            { title: "Cyber Loft", desc: "Ren / 23", img: "https://dummyimage.com/500x500/999/fff&text=2-2", hover: "https://dummyimage.com/500x500/000/fff&text=View" },
+            { title: "Neon City",  desc: "Urb / 2024", img: "https://dummyimage.com/500x500/888/fff&text=2-1", hover: "https://dummyimage.com/500x500/000/fff&text=View" },
+            { title: "Cyber Loft", desc: "Ren / 2023", img: "https://dummyimage.com/500x500/999/fff&text=2-2", hover: "https://dummyimage.com/500x500/000/fff&text=View" },
         ];
 
+        // Data: Row 3
         const row3_data = [
-            { title: "Dark Matter", desc: "Exh / 24", img: "https://dummyimage.com/500x500/555/fff&text=3-1", hover: "https://dummyimage.com/500x500/000/fff&text=View" },
-            { title: "Gray Scale",  desc: "Pho / 25", img: "https://dummyimage.com/500x500/666/fff&text=3-2", hover: "https://dummyimage.com/500x500/000/fff&text=View" },
-            { title: "Steel Frame", desc: "Con / 23", img: "https://dummyimage.com/500x500/777/fff&text=3-3", hover: "https://dummyimage.com/500x500/000/fff&text=View" },
-            { title: "Iron Works",  desc: "Art / 20", img: "https://dummyimage.com/500x500/888/fff&text=3-4", hover: "https://dummyimage.com/500x500/000/fff&text=View" },
+            { title: "Dark Matter", desc: "Exh / 2024", img: "https://dummyimage.com/500x500/555/fff&text=3-1", hover: "https://dummyimage.com/500x500/000/fff&text=View" },
+            { title: "Gray Scale",  desc: "Pho / 2025", img: "https://dummyimage.com/500x500/666/fff&text=3-2", hover: "https://dummyimage.com/500x500/000/fff&text=View" },
+            { title: "Steel Frame", desc: "Con / 2023", img: "https://dummyimage.com/500x500/777/fff&text=3-3", hover: "https://dummyimage.com/500x500/000/fff&text=View" },
+            { title: "Iron Works",  desc: "Art / 2022", img: "https://dummyimage.com/500x500/888/fff&text=3-4", hover: "https://dummyimage.com/500x500/000/fff&text=View" },
         ];
 
+        // ============================================================
+        // [LOGIC] Auto-Generator
+        // ============================================================
         function autoFillMarquee(trackId, dataList) {
             const container = document.getElementById(trackId);
             if(!container || dataList.length === 0) return;
 
+            // Algorithm: Fill buffer to min 30 items
             let filledList = [...dataList];
             while (filledList.length < 30) {
                 filledList = filledList.concat(dataList);
             }
+            // Double buffer for seamless loop
             filledList = filledList.concat(filledList);
 
             let htmlCode = "";
@@ -121,6 +151,7 @@
             container.innerHTML = htmlCode;
         }
 
+        // Initialize
         autoFillMarquee('track-1', row1_data);
         autoFillMarquee('track-2', row2_data);
         autoFillMarquee('track-3', row3_data);
