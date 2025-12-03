@@ -1,4 +1,5 @@
 /* style.css */
+
 @charset "utf-8";
 
 /* === Global Reset === */
@@ -37,11 +38,13 @@ header {
 .filter-btn:hover { text-decoration: underline; }
 .filter-btn.active { text-decoration: underline; font-weight: 900; }
 
-.date-text { 
+.about-link { 
     font-family: 'Pretendard', sans-serif; font-size: 0.9rem; 
-    font-weight: 400; color: #999; white-space: nowrap; 
-    flex: 1; text-align: right; letter-spacing: 0.05em; 
+    font-weight: 500; color: #000; white-space: nowrap; 
+    flex: 1; text-align: right; cursor: pointer;
+    transition: opacity 0.3s ease;
 }
+.about-link:hover { opacity: 0.6; }
 
 /* 2. 하단 (설명글) */
 .header-bottom { 
@@ -55,10 +58,10 @@ header {
     color: #000; width: 30%;
 }
 
-/* [수정됨] 너비 50%로 확장 */
+/* [수정됨] 너비 80%로 확장 */
 .header-desc { 
     font-family: 'Noto Serif KR', serif; font-size: 0.9rem; line-height: 1.4; color: #333; 
-    width: 50%; /* 40% -> 50% 변경 */
+    width: 80%;
     word-break: keep-all; text-align: justify;
 }
 
@@ -81,14 +84,80 @@ header {
     }
     .filter-btn { font-size: 0.95rem; } 
 
-    .date-text { 
+    .about-link { 
         flex: auto; width: 100%; text-align: center; 
-        font-size: 0.75rem; margin-top: 5px; 
+        font-size: 0.85rem; margin-top: 5px; 
     }
     
     .header-bottom { flex-direction: column; gap: 15px; align-items: flex-start; padding: 1rem 0; }
     .header-subtitle { width: 100%; margin-bottom: 0; font-size: 1rem; }
     .header-desc { width: 100%; font-size: 0.85rem; line-height: 1.5; color: #555; }
+}
+
+/* === Footer (하단 헤더) === */
+footer {
+    flex: 0 0 auto;
+    width: 100%;
+    background: #fff;
+    z-index: 100;
+    padding: 0 2rem;
+    border-top: 1px solid #000;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 0;
+}
+
+.footer-links {
+    display: flex;
+    gap: 25px;
+}
+
+.footer-link {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #000;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.footer-link:hover {
+    opacity: 0.6;
+}
+
+.footer-copyright {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #999;
+}
+
+/* 모바일 대응 - 푸터 */
+@media (max-width: 768px) {
+    footer { padding: 0 1.2rem; }
+    
+    .footer-content {
+        flex-direction: column;
+        gap: 10px;
+        padding: 1rem 0;
+    }
+    
+    .footer-links {
+        width: 100%;
+        justify-content: center;
+        gap: 20px;
+    }
+    
+    .footer-link { font-size: 0.85rem; }
+    
+    .footer-copyright {
+        font-size: 0.75rem;
+        text-align: center;
+    }
 }
 
 /* === Content === */
@@ -102,12 +171,996 @@ header {
 }
 .marquee-row:active { cursor: grabbing; }
 
-.box-container { flex: 0 0 auto; position: relative; height: 85%; aspect-ratio: 1/1; margin-right: 2vh; overflow: hidden; }
+/* .row-1, 2, 3 애니메이션은 JS에서 제어하므로 CSS 삭제됨 */
+
+.box-container { flex: 0 0 auto; position: relative; height: 85%; aspect-ratio: 4/5; margin-right: 2vh; overflow: hidden; }
 .box-base { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-family: 'Pretendard', sans-serif; font-size: 3rem; font-weight: 700; color: #fff; }
 .box-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; opacity: 0; transition: opacity 0.3s ease; z-index: 10; display: flex; justify-content: center; align-items: center; }
 .overlay-text { font-family: 'Pretendard', sans-serif; font-size: 1.2rem; font-weight: 500; color: #fff; }
 .box-container:hover .box-overlay { opacity: 1; }
 
-.caption-box { position: absolute; bottom: 0; left: 0; width: 100%; padding: 10px; z-index: 20; pointer-events: none; }
+.caption-box { position: absolute; bottom: 0; left: 0; width: 100%; padding: 12px; z-index: 20; pointer-events: none; }
 .title-text { font-family: 'Pretendard', sans-serif; font-size: 0.9rem; font-weight: 700; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.5); display: block; margin-bottom: 2px; }
-.desc-text { font-family: 'Noto Serif KR', serif; font-size: 0.75rem; font-weight: 400; color: #ddd; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+.desc-text { font-family: 'Pretendard', sans-serif; font-size: 0.75rem; font-weight: 400; color: #ddd; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+
+/* 프로젝트 클릭 가능하도록 */
+.box-container { cursor: pointer; }
+
+/* === 프로젝트 상세 모달 (팝업 창 스타일) === */
+.project-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.project-modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+}
+
+.modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 900px;
+    max-height: 85vh;
+    margin: 0;
+    overflow-y: auto;
+    padding: 3rem;
+    z-index: 1001;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3), 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+@media (min-width: 1024px) {
+    .modal-content {
+        padding: 3rem 4rem;
+        max-width: 1000px;
+        max-height: 90vh;
+    }
+}
+
+/* 가로 비율이 긴 경우 (landscape + 넓은 화면) - 3단 레이아웃 */
+@media (min-width: 1200px) and (min-aspect-ratio: 4/3) {
+    .modal-content {
+        width: 80%;
+        max-width: 1000px;
+        max-height: 90vh;
+        padding: 2rem 3rem;
+    }
+}
+
+@media (min-width: 1440px) and (min-aspect-ratio: 4/3) {
+    .modal-content {
+        width: 70%;
+        max-width: 1100px;
+        max-height: 90vh;
+        padding: 2rem 3rem;
+    }
+}
+
+/* 4K 및 초광폭 화면 대응 */
+@media (min-width: 1920px) and (min-aspect-ratio: 4/3) {
+    .modal-content {
+        width: 55%;
+        max-width: 1200px;
+        max-height: 90vh;
+        padding: 1.5rem 2.5rem;
+    }
+}
+
+@media (min-width: 2560px) and (min-aspect-ratio: 4/3) {
+    .modal-content {
+        width: 55%;
+        max-width: 1300px;
+        max-height: 90vh;
+        padding: 1.5rem 2rem;
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    color: #000;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1002;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background 0.3s ease;
+    border-radius: 50%;
+}
+.modal-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 1024px) {
+    .modal-close {
+        top: 1.5rem;
+        right: 1.5rem;
+        width: 45px;
+        height: 45px;
+        font-size: 1.8rem;
+    }
+}
+
+.project-detail {
+    max-width: 100%;
+    margin: 0 auto;
+    font-family: 'Pretendard', sans-serif;
+}
+
+/* 메타 정보 스타일 (인라인 - 기본) */
+.project-meta {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.project-meta .meta-item {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.project-meta .meta-item strong {
+    color: #000;
+    font-weight: 600;
+}
+
+/* 사이드바 스타일 (기본: 숨김) */
+.project-sidebar-left,
+.project-sidebar-right {
+    display: none;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #666;
+}
+
+.sidebar-section {
+    margin-bottom: 2rem;
+}
+
+.sidebar-title {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #000;
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-content {
+    color: #666;
+}
+
+.sidebar-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-list li {
+    margin: 0.4rem 0;
+    padding-left: 1.2rem;
+    position: relative;
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+.sidebar-list li::before {
+    content: '●';
+    position: absolute;
+    left: 0;
+    font-size: 0.5rem;
+    top: 0.25rem;
+    color: #999;
+}
+
+/* 가로 비율이 긴 경우 - 3단 레이아웃 */
+@media (min-width: 1200px) and (min-aspect-ratio: 4/3) {
+    .project-detail {
+        display: grid;
+        grid-template-columns: 180px 1fr 180px;
+        gap: 3rem;
+        align-items: start;
+    }
+    
+    /* 메타 정보 숨김 (사이드바로 대체) */
+    .project-meta {
+        display: none;
+    }
+    
+    /* 사이드바 표시 */
+    .project-sidebar-left,
+    .project-sidebar-right {
+        display: block;
+        position: sticky;
+        top: 0;
+    }
+    
+    .project-sidebar-left {
+        grid-column: 1;
+        grid-row: 1 / span 20;
+    }
+    
+    .project-sidebar-right {
+        grid-column: 3;
+        grid-row: 1 / span 20;
+    }
+    
+    /* 본문 콘텐츠 */
+    .project-detail .project-caption,
+    .project-detail h1,
+    .project-detail .project-body,
+    .project-detail .gallery-grid {
+        grid-column: 2;
+    }
+}
+
+@media (min-width: 1440px) and (min-aspect-ratio: 4/3) {
+    .project-detail {
+        grid-template-columns: 170px 1fr 170px;
+        gap: 2rem;
+    }
+    
+    /* 가로 비율 긴 경우 - 콘텐츠 크기 축소 */
+    .project-detail .project-caption {
+        font-size: 0.65rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .project-detail h1 {
+        font-size: 1.4rem;
+        margin: 0.5rem 0;
+    }
+    
+    .project-detail .project-body {
+        font-size: 0.7rem;
+        line-height: 1.5;
+        margin: 0.5rem 0;
+    }
+    
+    .project-detail .project-body p {
+        margin: 0.3rem 0;
+        text-indent: 1.5em;
+    }
+    
+    .media-item .caption {
+        font-size: 0.6rem;
+    }
+    
+    /* 갤러리 3열로 변경 */
+    .project-detail .gallery-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.8rem;
+        margin: 0.6rem 0;
+    }
+}
+
+/* 4K 및 초광폭 화면 대응 */
+@media (min-width: 1920px) and (min-aspect-ratio: 4/3) {
+    .project-detail {
+        grid-template-columns: 150px 1fr 150px;
+        gap: 1.5rem;
+    }
+    
+    .project-detail .project-caption {
+        font-size: 0.55rem;
+        margin-bottom: 0.4rem;
+    }
+    
+    .project-detail h1 {
+        font-size: 1.2rem;
+        margin: 0.4rem 0;
+    }
+    
+    .project-detail .project-body {
+        font-size: 0.65rem;
+        line-height: 1.4;
+        margin: 0.4rem 0;
+    }
+    
+    .project-detail .project-body p {
+        margin: 0.2rem 0;
+        text-indent: 1.2em;
+    }
+    
+    .media-item .caption {
+        font-size: 0.55rem;
+    }
+    
+    /* 갤러리 3열 유지, 간격 축소 */
+    .project-detail .gallery-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.6rem;
+        margin: 0.5rem 0;
+    }
+}
+
+/* 2560px 이상 초광폭 화면 */
+@media (min-width: 2560px) and (min-aspect-ratio: 4/3) {
+    .project-detail {
+        grid-template-columns: 130px 1fr 130px;
+        gap: 1.2rem;
+    }
+    
+    .project-detail .project-caption {
+        font-size: 0.5rem;
+        margin-bottom: 0.3rem;
+    }
+    
+    .project-detail h1 {
+        font-size: 1rem;
+        margin: 0.3rem 0;
+    }
+    
+    .project-detail .project-body {
+        font-size: 0.6rem;
+        line-height: 1.4;
+        margin: 0.3rem 0;
+    }
+    
+    .project-detail .project-body p {
+        margin: 0.15rem 0;
+        text-indent: 1em;
+    }
+    
+    .media-item .caption {
+        font-size: 0.5rem;
+    }
+    
+    .project-detail .gallery-grid {
+        gap: 0.5rem;
+        margin: 0.4rem 0;
+    }
+}
+
+/* Cargo 스타일 제목 */
+.project-detail .project-caption {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 2rem;
+    letter-spacing: 0.05em;
+}
+
+.project-detail h1 {
+    text-align: center;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 2rem 0 2rem 0;
+    line-height: 1.2;
+}
+
+@media (min-width: 1024px) {
+    .project-detail h1 {
+        font-size: 3rem;
+        margin: 2rem 0;
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 1440px) {
+    .project-detail h1 {
+        font-size: 3.5rem;
+        margin: 2rem 0;
+    }
+}
+
+/* 본문 텍스트 */
+.project-detail .project-body {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #333;
+    margin: 2rem 0;
+    text-align: justify;
+    max-width: 100%;
+}
+.project-detail .project-body p {
+    margin: 0 0 1rem 0;
+    text-indent: 2em;
+}
+.project-detail .project-body p:last-child {
+    margin-bottom: 0;
+}
+
+@media (min-width: 1024px) {
+    .project-detail .project-body {
+        font-size: 1.05rem;
+        line-height: 1.9;
+        margin: 2rem 0;
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 1440px) {
+    .project-detail .project-body {
+        font-size: 1.1rem;
+        line-height: 2;
+        margin: 2rem 0;
+    }
+}
+.project-detail .project-body a {
+    color: #000;
+    text-decoration: underline;
+}
+
+/* 갤러리 그리드 (Cargo 스타일) */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin: 2rem 0 1rem 0;
+    max-width: 100%;
+}
+
+@media (min-width: 1024px) {
+    .gallery-grid {
+        gap: 2.5rem;
+        margin: 2.5rem 0 1.5rem 0;
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 1440px) {
+    .gallery-grid {
+        gap: 3rem;
+        margin: 3rem 0 2rem 0;
+    }
+}
+
+.media-item {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+.media-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+    object-fit: cover;
+}
+.media-item.zoomable:hover img {
+    transform: scale(1.05);
+}
+
+@media (min-width: 1024px) {
+    .media-item img {
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 1440px) {
+    .media-item img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+.media-item .caption {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 0.5rem;
+    line-height: 1.5;
+    text-align: left;
+}
+
+/* 중앙 정렬 이미지 */
+.media-item.center {
+    text-align: center;
+    margin: 2rem 0 3rem 0;
+}
+.media-item.center img {
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+@media (min-width: 1024px) {
+    .media-item.center {
+        margin: 2rem 0 3rem 0;
+    }
+}
+
+@media (min-width: 1440px) {
+    .media-item.center {
+        margin: 2rem 0 3rem 0;
+    }
+}
+
+/* 리스트 스타일 */
+.project-detail ol {
+    list-style: decimal;
+    padding-left: 2rem;
+    margin: 2rem 0;
+}
+.project-detail ol li {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+    .modal-content {
+        padding: 2rem 1rem;
+    }
+    .modal-close {
+        top: 1rem;
+        right: 1rem;
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+    }
+    .project-detail h1 {
+        font-size: 1.8rem;
+    }
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    .project-detail .project-body {
+        font-size: 0.9rem;
+    }
+}
+
+/* === 이미지 확대 모달 === */
+.image-lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-lightbox.active {
+    display: flex;
+    opacity: 1;
+}
+
+.image-lightbox-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    cursor: pointer;
+}
+
+.image-lightbox-content {
+    position: relative;
+    z-index: 2001;
+    max-width: 90vw;
+    max-height: 85vh;
+    padding: 1rem;
+}
+
+.image-lightbox-content img {
+    max-width: 100%;
+    max-height: 80vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* 데스크탑에서는 1080px로 제한 */
+@media (min-width: 1200px) {
+    .image-lightbox-content {
+        max-width: 1080px;
+        padding: 0;
+    }
+    
+    .image-lightbox-content img {
+        max-width: 1080px;
+        max-height: 90vh;
+    }
+}
+
+.image-lightbox-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: opacity 0.3s ease;
+}
+
+.image-lightbox-close:hover {
+    opacity: 0.7;
+}
+
+/* 갤러리 이미지 클릭 커서 */
+.media-item.zoomable {
+    cursor: zoom-in;
+}
+
+/* === About Us 모달 스타일 === */
+
+/* About 모달일 때 3단 그리드 비활성화 */
+.project-detail.about-mode,
+.project-detail:has(.about-content) {
+    display: block !important;
+    grid-template-columns: none !important;
+}
+
+.about-content {
+    max-width: 700px;
+    margin: 0 auto;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.about-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+}
+
+.about-header .studio-name {
+    font-size: 3rem;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: 0.1em;
+}
+
+.about-header .studio-name-en {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #666;
+    margin: 0.5rem 0 0 0;
+}
+
+/* Statement */
+.about-statement {
+    margin-bottom: 3rem;
+}
+
+.about-statement h2,
+.about-artists h2,
+.about-exhibitions h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #000;
+    display: inline-block;
+}
+
+.statement-body {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.05rem;
+    line-height: 2;
+    color: #333;
+    text-align: justify;
+}
+
+.statement-body p {
+    margin: 0 0 1.5rem 0;
+    text-indent: 1em;
+}
+
+.statement-body p:first-child {
+    font-weight: 500;
+    text-indent: 0;
+}
+
+.statement-body .statement-year {
+    text-align: right;
+    font-style: italic;
+    color: #999;
+    margin-top: 2rem;
+    text-indent: 0;
+}
+
+/* Artists Grid */
+.about-artists {
+    margin-bottom: 3rem;
+}
+
+.artists-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+.about-content .artist-card {
+    padding: 1.5rem;
+    background: #eeeeee !important;
+    border-radius: 8px;
+}
+
+.artist-card h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0 0 0.3rem 0;
+}
+
+.artist-card .artist-name-en {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #666;
+}
+
+.artist-card .artist-role {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #888;
+    margin: 0.3rem 0 0.8rem 0;
+    font-style: italic;
+}
+
+.artist-contact {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 1rem 0;
+}
+
+.artist-contact a {
+    color: #000;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.artist-contact a:hover {
+    opacity: 0.6;
+}
+
+.artist-education h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 1rem 0 0.5rem 0;
+    color: #666;
+}
+
+.artist-education p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0 0 0.8rem 0;
+}
+
+.artist-education .degree {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* Exhibition Record */
+.about-exhibitions {
+    margin-bottom: 2rem;
+}
+
+.exhibition-list {
+    border-top: 1px solid #eee;
+}
+
+.exhibition-year {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 1.5rem;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.exhibition-year .year {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #000;
+    white-space: nowrap;
+}
+
+.exhibition-year .exhibitions p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 0.5rem 0;
+    color: #333;
+}
+
+.exhibition-year .exhibitions p:last-child {
+    margin-bottom: 0;
+}
+
+.exhibition-year .exhibitions .project-subitem {
+    padding-left: 1.5rem;
+    font-size: 0.7em;
+    color: #666;
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 1.2;
+}
+
+/* About 모달 내부에서만 적용 */
+.about-content .exhibition-year .exhibitions .project-subitem {
+    font-size: 0.7em;
+}
+
+.exhibition-year .exhibitions .project-parent {
+    margin-bottom: 0.1rem;
+}
+
+.exhibition-year .exhibitions .project-subitem:first-of-type {
+    margin-top: 0;
+}
+
+.exhibition-year .exhibitions .project-subitem:last-of-type {
+    margin-bottom: 0.5rem;
+}
+
+/* GENESIS 앞에 간격 추가 */
+.exhibition-year .exhibitions .project-separator {
+    margin-top: 1rem;
+}
+
+/* About 모바일 대응 */
+@media (max-width: 768px) {
+    .about-header .studio-name {
+        font-size: 2.2rem;
+    }
+    
+    .about-header .studio-name-en {
+        font-size: 1rem;
+    }
+    
+    .artists-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .artist-card {
+        padding: 1.2rem;
+    }
+    
+    .statement-body {
+        font-size: 0.9rem;
+        line-height: 1.8;
+    }
+    
+    .exhibition-year {
+        grid-template-columns: 85px 1fr;
+        gap: 1rem;
+    }
+    
+    .exhibition-year .year {
+        font-size: 0.85rem;
+    }
+    
+    .exhibition-year .exhibitions p {
+        font-size: 0.85rem;
+    }
+}
+
+/* About 와이드스크린 대응 */
+@media (min-width: 1200px) {
+    .about-content .artist-card {
+        padding: 1.5rem;
+        background: #eeeeee !important;
+        border-radius: 8px;
+    }
+    
+    .about-content .exhibition-year .exhibitions .project-subitem {
+        font-size: 0.5em !important;
+    }
+}
+
+@media (min-width: 1440px) and (min-aspect-ratio: 4/3) {
+    .about-content {
+        max-width: 750px;
+    }
+    
+    .about-header .studio-name {
+        font-size: 2.8rem;
+    }
+    
+    .statement-body {
+        font-size: 1rem;
+        line-height: 1.9;
+    }
+    
+    .statement-body p {
+        margin: 0 0 1.2rem 0;
+    }
+    
+    .about-content .artist-card {
+        padding: 1.5rem;
+        background: #eeeeee !important;
+        border-radius: 8px;
+    }
+    
+    .about-content .exhibition-year .exhibitions .project-subitem {
+        font-size: 0.4em !important;
+    }
+}
+
+@media (min-width: 1920px) and (min-aspect-ratio: 4/3) {
+    .about-content {
+        max-width: 700px;
+    }
+    
+    .about-header .studio-name {
+        font-size: 2.5rem;
+    }
+    
+    .statement-body {
+        font-size: 0.95rem;
+        line-height: 1.85;
+    }
+    
+    .about-content .artist-card {
+        padding: 1.5rem;
+        background: #eeeeee !important;
+        border-radius: 8px;
+    }
+    
+    .about-content .artist-card h3 {
+        font-size: 1.2rem;
+    }
+    
+    .about-content .artist-contact,
+    .about-content .artist-education p {
+        font-size: 0.9rem;
+    }
+    
+    .about-content .exhibition-year .exhibitions p {
+        font-size: 0.95rem;
+    }
+    
+    .about-content .exhibition-year .exhibitions .project-subitem {
+        font-size: 0.35em !important;
+    }
+}
+
+@media (min-width: 2560px) and (min-aspect-ratio: 4/3) {
+    .about-content .exhibition-year .exhibitions .project-subitem {
+        font-size: 0.3em !important;
+    }
+}
