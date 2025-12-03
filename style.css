@@ -4,10 +4,18 @@
 
 /* === Global Reset === */
 * { box-sizing: border-box; }
-html { margin: 0; padding: 0; width: 100%; height: 100%; background: #fff; }
+html { 
+    margin: 0; padding: 0; width: 100%; height: 100%; background: #fff; 
+    /* iOS 전체 페이지 스크롤 방지 */
+    overflow: hidden;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+}
 body { 
     margin: 0; padding: 0; width: 100%; height: 100%; background: #fff;
     display: flex; flex-direction: column; overflow: hidden;
+    /* iOS overscroll 방지 */
+    overscroll-behavior: none;
 }
 
 /* === Header System === */
@@ -68,6 +76,20 @@ header {
     word-break: keep-all; text-align: justify;
 }
 
+/* 모바일 접기/펼치기 기능 */
+.header-desc-wrapper {
+    width: 80%;
+    position: relative;
+}
+
+.header-desc-toggle {
+    display: none;
+}
+
+.header-desc-wrapper .header-desc {
+    width: 100%;
+}
+
 /* 모바일 대응 */
 @media (max-width: 768px) {
     header { padding: 0 1.2rem; }
@@ -92,9 +114,40 @@ header {
         font-size: 0.85rem; margin-top: 5px; 
     }
     
-    .header-bottom { flex-direction: column; gap: 15px; align-items: flex-start; padding: 1rem 0; }
+    .header-bottom { flex-direction: column; gap: 10px; align-items: flex-start; padding: 1rem 0; }
     .header-subtitle { width: 100%; margin-bottom: 0; font-size: 1rem; }
-    .header-desc { width: 100%; font-size: 0.85rem; line-height: 1.5; color: #555; }
+    
+    /* 모바일 설명 접기/펼치기 */
+    .header-desc-wrapper { width: 100%; }
+    
+    .header-desc { 
+        width: 100%; font-size: 0.8rem; line-height: 1.5; color: #555; 
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+    
+    .header-desc-wrapper.expanded .header-desc {
+        max-height: 500px;
+    }
+    
+    .header-desc-toggle {
+        display: block;
+        font-family: 'Pretendard', sans-serif;
+        font-size: 0.8rem;
+        color: #999;
+        cursor: pointer;
+        padding: 5px 0;
+    }
+    
+    .header-desc-toggle::after {
+        content: ' ▼';
+        font-size: 0.6rem;
+    }
+    
+    .header-desc-wrapper.expanded .header-desc-toggle::after {
+        content: ' ▲';
+    }
     
     /* 모바일 박스 폰트 크기 축소 */
     .box-base { font-size: 1.5rem; }

@@ -346,6 +346,22 @@ function filterBy(filterType) {
 filterBy('All');
 
 // ============================================================
+// [DESCRIPTION TOGGLE] 모바일 설명 접기/펼치기
+// ============================================================
+function toggleDescription() {
+    const wrapper = document.getElementById('desc-wrapper');
+    const toggle = wrapper.querySelector('.header-desc-toggle');
+    
+    if (wrapper.classList.contains('expanded')) {
+        wrapper.classList.remove('expanded');
+        toggle.textContent = '소개 보기';
+    } else {
+        wrapper.classList.add('expanded');
+        toggle.textContent = '소개 접기';
+    }
+}
+
+// ============================================================
 // [ABOUT MODAL] About Us 모달
 // ============================================================
 function openAboutModal() {
