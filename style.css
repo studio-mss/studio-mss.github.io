@@ -4,12 +4,39 @@
 
 /* === Global Reset === */
 * { box-sizing: border-box; }
-body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #fff; }
-body { display: flex; flex-direction: column; overflow: hidden; }
+html { 
+    margin: 0; 
+    padding: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: #fff;
+}
+body { 
+    margin: 0; 
+    padding: 0; 
+    width: 100%; 
+    min-height: 100%; 
+    background: #fff;
+    display: flex; 
+    flex-direction: column; 
+    overflow: hidden;
+    /* iOS 안전 영역 대응 */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+}
 
-/* 모바일에서는 스크롤 허용 */
+/* 모바일에서는 블록 레이아웃 + 스크롤 허용 */
 @media (max-width: 768px) {
-    body { overflow: auto; overflow-x: hidden; }
+    html, body { 
+        height: auto;
+        min-height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    body {
+        display: block;
+    }
 }
 
 /* === Header System === */
@@ -103,6 +130,19 @@ header {
     .title-text { font-size: 0.7rem; }
     .desc-text { font-size: 0.6rem; }
     .caption-box { padding: 8px; }
+    
+    /* 모바일 마키 row 높이 균등 배분 */
+    .marquee-row {
+        flex: none;
+        height: 33%;
+        min-height: 80px;
+    }
+    
+    /* 모바일 박스 크기 조정 */
+    .box-container {
+        height: 100%;
+        margin-right: 8px;
+    }
 }
 
 /* === Footer (하단 헤더) === */
@@ -173,14 +213,43 @@ footer {
 
 /* === Content === */
 .full-screen-wrapper {
-    flex: 1; width: 100%; display: flex; flex-direction: column; justify-content: space-evenly;
-    padding: 1vh 0; overflow: hidden;
+    flex: 1; 
+    width: 100%; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-evenly;
+    padding: 1vh 0; 
+    overflow: hidden;
+    /* iOS 높이 계산 개선 */
+    min-height: 0;
 }
+
+/* 모바일: wrapper 높이 고정 */
+@media (max-width: 768px) {
+    .full-screen-wrapper {
+        flex: none;
+        /* fallback for older browsers */
+        height: 50vh;
+        /* 동적 뷰포트 높이 사용 - iOS 대응 */
+        height: calc(100svh - 280px);
+        height: calc(100dvh - 280px);
+        min-height: 250px;
+        max-height: 500px;
+        overflow: hidden;
+        padding: 8px 0;
+    }
+}
+
 .marquee-row { 
-    flex: 1; display: flex; align-items: center; white-space: nowrap; width: max-content;
-    cursor: grab; will-change: transform;
-    touch-action: pan-y pinch-zoom;
-    -webkit-overflow-scrolling: touch;
+    flex: 1; 
+    display: flex; 
+    align-items: center; 
+    white-space: nowrap; 
+    width: max-content;
+    cursor: grab; 
+    will-change: transform;
+    /* 수직 스크롤만 허용, 수평은 JS가 처리 */
+    touch-action: pan-y;
 }
 .marquee-row:active { cursor: grabbing; }
 

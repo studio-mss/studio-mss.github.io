@@ -141,33 +141,35 @@ class InertiaMarquee {
 
         // --- 모바일 터치 이벤트 (iOS Safari 대응) ---
         this.el.addEventListener('touchstart', (e) => {
-            this.isDragging = true;
-            this.startX = e.touches[0].pageX;
-            this.startY = e.touches[0].pageY;
+            // 터치 시작점 기록
+            this.touchStartX = e.touches[0].pageX;
+            this.touchStartY = e.touches[0].pageY;
             this.lastX = this.currentPos;
             this.lastMouseX = e.touches[0].pageX;
             this.velocity = 0;
             this.isHorizontalSwipe = null;
+            this.isDragging = false; // 방향 결정 전까지는 false
         }, { passive: true });
 
         this.el.addEventListener('touchmove', (e) => {
-            if (!this.isDragging) return;
+            const diffX = e.touches[0].pageX - this.touchStartX;
+            const diffY = e.touches[0].pageY - this.touchStartY;
             
-            const diffX = e.touches[0].pageX - this.startX;
-            const diffY = e.touches[0].pageY - this.startY;
-            
-            // 첫 움직임에서 수평/수직 판단
-            if (this.isHorizontalSwipe === null) {
-                this.isHorizontalSwipe = Math.abs(diffX) > Math.abs(diffY);
+            // 첫 움직임에서 수평/수직 판단 (5px 이상 움직였을 때)
+            if (this.isHorizontalSwipe === null && (Math.abs(diffX) > 5 || Math.abs(diffY) > 5)) {
+                // 수평 움직임이 수직보다 1.2배 이상 크면 수평 스와이프로 판단
+                this.isHorizontalSwipe = Math.abs(diffX) > Math.abs(diffY) * 1.2;
+                this.isDragging = this.isHorizontalSwipe;
             }
             
-            // 수평 스와이프일 때만 마키 이동
-            if (this.isHorizontalSwipe) {
+            // 수평 스와이프일 때만 마키 이동 + 기본 스크롤 방지
+            if (this.isHorizontalSwipe && this.isDragging) {
                 e.preventDefault();
                 this.currentPos = this.lastX + diffX;
                 this.velocity = e.touches[0].pageX - this.lastMouseX;
                 this.lastMouseX = e.touches[0].pageX;
             }
+            // 수직 스와이프면 아무것도 안 함 -> 기본 페이지 스크롤 동작
         }, { passive: false });
 
         this.el.addEventListener('touchend', () => {
