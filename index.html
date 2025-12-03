@@ -22,14 +22,14 @@
                 <div class="filter-btn" onclick="filterBy('Scale')">Scale</div>
             </div>
             
-            <div class="date-text">2025.11.28</div>
+            <div class="about-link" onclick="openAboutModal()">About Us</div>
         </div>
         
         <div class="header-bottom">
             <div class="header-subtitle" id="current-filter-label">All Projects</div>
             
             <div class="header-desc">
-                Curabitur vitae odio pretium, volutpat augue efficitur, ullamcorper ante. Nunc ultrices eget urna in aliquet. Nulla at ullamcorper leo. Aliquam egestas non lacus sed tempor.
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
             </div>
         </div>
     </header>
@@ -38,6 +38,38 @@
         <div class="marquee-row row-1" id="track-1"></div>
         <div class="marquee-row row-2" id="track-2"></div>
         <div class="marquee-row row-3" id="track-3"></div>
+    </div>
+
+    <!-- 푸터 (하단 헤더) -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="mailto:483lhy@gmail.com" class="footer-link">Email</a>
+                <a href="https://www.instagram.com/a.total.librarian/" target="_blank" class="footer-link">Instagram</a>
+                <a href="#" class="footer-link">Store</a>
+            </div>
+            <div class="footer-copyright">© 2025 Studio MS²</div>
+        </div>
+    </footer>
+
+    <!-- 프로젝트 상세 모달 -->
+    <div class="project-modal" id="project-modal">
+        <div class="modal-overlay" onclick="closeProjectModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProjectModal()" aria-label="닫기">×</button>
+            <div class="project-detail" id="project-detail">
+                <!-- 동적으로 로드됨 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 이미지 확대 모달 -->
+    <div class="image-lightbox" id="image-lightbox">
+        <div class="image-lightbox-overlay" onclick="closeLightbox()"></div>
+        <div class="image-lightbox-content">
+            <button class="image-lightbox-close" onclick="closeLightbox()" aria-label="닫기">×</button>
+            <img id="lightbox-image" src="" alt="확대 이미지">
+        </div>
     </div>
 
     <script src="script.js"></script>
