@@ -19,7 +19,7 @@ const row2_data = [
 // 실제 프로젝트 데이터
 const row3_data = [
     { 
-        title: "을지로 기하 수집 한옥화", 
+        title: "기하수집 한옥화", 
         desc: "기하수집 한옥화 / 2025", 
         color: "#466236", 
         type: "Scale",
